@@ -26,7 +26,7 @@ class RabbitmqServer:
         self.pdf_process_function(body)
 
     def consume_message(self, queue_name):
-        self.channel.basic_consume(queue=queue_name, on_message_callback=self.callback, auto_ack=True)
+        self.channel.basic_consume(queue=queue_name, on_message_callback=self.callback, auto_ack=False)
         self.channel.start_consuming()
         self.channel.close()
 
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     host = 'amqp://guest:guest@abhra-ubuntu:5672/%2f'
     consumer_object = RabbitmqServer(host)
     # consumer_object.declare_queue('myqueue1')
-    consumer_object.consume_message('topic_queue_errors')
+    consumer_object.consume_message('queue_cpp')
 

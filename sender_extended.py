@@ -27,6 +27,10 @@ class Sender:
         self.channel_component.queue_bind(queue=queue_name, exchange=exchange_name, routing_key = key)
         LOGGER.info('Queue - {} and Exchange - {} Binded '.format(queue_name, exchange_name))
 
+    def bind_exchange_to_exchange(self, source, destination, key):
+        self.channel_component.exchange_bind(source, destination, key)
+        LOGGER.info('Source - {} and Destination Exchange - {} Binded '.format(source, destination))
+
     def publish_message(self, exchange_name, message_body, key):
         self.channel_component.basic_publish(
             exchange=exchange_name,  # amq.topic as exchange
@@ -39,19 +43,19 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
     sender_object = Sender('localhost')
     # sender_object.define_channel()
-    exchange_name = 'ex.topic1'
-    exchange_type = 'topic'
+    exchange_name = 'ex.fanout2'
+    exchange_type = 'fanout'
     sender_object.declare_exchange(exchange_name, exchange_type)
-    queue_list = ['topic_queue_errors']
+    queue_list = ['queue_python', 'queue_java', 'queue_cpp']
     for queue_name in queue_list:
         sender_object.declare_queue(queue_name)
-        binding_key = '#.errors'
+        binding_key = 'errors'
         sender_object.bind_queue_to_exchange(queue_name, exchange_name, binding_key)
-    routing_key_list = ['python.errors', 'java.cpp.errors', 'errors.log']
+    routing_key_list = ['python.errors', 'java.cpp.errors', 'errors.log', 'all_errors']
     for routing_key in routing_key_list:
         for i in range(10):
             message_body = 'Hello World {} , errors= {}'.format(i, routing_key)
             sender_object.publish_message(exchange_name, message_body, routing_key)
-            time.sleep(2)
+            time.sleep(1)
 
 
