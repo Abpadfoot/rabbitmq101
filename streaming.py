@@ -10,7 +10,7 @@ sc.setLogLevel("OFF")
 # lines = ssc.textFileStream('/home/bluepi/PycharmProjects/rabbitmq101/data/')
 mqttStream = MQTTUtils.createStream(
     ssc,
-    "localhost:1883",  # Note both port number and protocol
+    "localhost:5672",  # Note both port number and protocol
     "queue_errors",
     username='guest',
     password='guest'
